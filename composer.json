@@ -1,0 +1,29 @@
+{
+    "name": "navarr/smartstring",
+    "description": "An object that can intelligently determine whether to use grapheme_* or byte-focused string functions",
+    "license": [
+        "MIT"
+    ],
+    "authors": [
+        {
+            "name": "Navarr Barnier",
+            "email": "me@navarr.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Navarr\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "jetbrains/phpstorm-attributes": "^1",
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1",
+        "infection/infection": "^0.26.0",
+        "squizlabs/php_codesniffer": "^3.7",
+        "roave/security-advisories": "dev-master"
+    }
+}
