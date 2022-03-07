@@ -63,7 +63,7 @@ class SmartString implements Stringable
             true => grapheme_stristr($this->value, $needle, $beforeNeedle),
             false => stristr($this->value, $needle, $beforeNeedle),
         };
-        return $value ? static::build($value) : $value;
+        return is_string($value) ? static::build($value) : false;
     }
 
     #[Pure]
@@ -102,7 +102,7 @@ class SmartString implements Stringable
             true => grapheme_substr($this->value, $offset, $length),
             false => substr($this->value, $offset, $length),
         };
-        return $value ? static::build($value) : $value;
+        return is_string($value) ? static::build($value) : $value;
     }
 
     #[Pure]
@@ -138,7 +138,7 @@ class SmartString implements Stringable
             true => grapheme_strstr($this->value, $needle, $beforeNeedle),
             false => strstr($this->value, $needle, $beforeNeedle),
         };
-        return $result ? static::build($result) : $result;
+        return is_string($result) ? static::build($result) : $result;
     }
 
     #[Pure]
@@ -169,7 +169,7 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function concatenate(Stringable|string $additionalValue): static
+    public function concatenate(Stringable|string $additionalValue): SmartString
     {
         return $this->concat($additionalValue);
     }
