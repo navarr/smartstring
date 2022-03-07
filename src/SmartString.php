@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Navarr\SmartString;
 
 use JetBrains\PhpStorm\Immutable;
