@@ -26,18 +26,18 @@ use function substr;
 #[Immutable]
 class SmartString implements Stringable
 {
-    const CASE_INSENSITIVE = 1;
+    public const CASE_INSENSITIVE = 1;
 
     private function __construct(private readonly string $value, private readonly bool $shouldUseGrapheme)
     {
     }
 
     #[Pure]
-    public static function build(Stringable|string $value): static
+    public static function build(Stringable|string $value): SmartString
     {
         $value = (string)$value;
         $multiCharacter = grapheme_strlen($value) !== strlen($value);
-        return new static($value, $multiCharacter);
+        return new SmartString($value, $multiCharacter);
     }
 
     #[Pure]
@@ -56,13 +56,14 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function stristr(Stringable|string $needle, bool $beforeNeedle = false): static|false
+    public function stristr(Stringable|string $needle, bool $beforeNeedle = false): SmartString|false
     {
         $needle = (string)$needle;
-        return match ($this->shouldUseGrapheme) {
+        $value = match ($this->shouldUseGrapheme) {
             true => grapheme_stristr($this->value, $needle, $beforeNeedle),
             false => stristr($this->value, $needle, $beforeNeedle),
         };
+        return is_string($value) ? static::build($value) : false;
     }
 
     #[Pure]
@@ -95,17 +96,17 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function substr(int $offset, ?int $length = null): string|false
+    public function substr(int $offset, ?int $length = null): SmartString|false
     {
         $value = match ($this->shouldUseGrapheme) {
             true => grapheme_substr($this->value, $offset, $length),
             false => substr($this->value, $offset, $length),
         };
-        return static::build($value);
+        return is_string($value) ? static::build($value) : $value;
     }
 
     #[Pure]
-    public function substring(int $offset, ?int $length = null): static|false
+    public function substring(int $offset, ?int $length = null): SmartString|false
     {
         return $this->substr($offset, $length);
     }
@@ -130,14 +131,14 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function strstr(Stringable|string $needle, bool $beforeNeedle = false): static|false
+    public function strstr(Stringable|string $needle, bool $beforeNeedle = false): SmartString|false
     {
         $needle = (string)$needle;
         $result = match ($this->shouldUseGrapheme) {
             true => grapheme_strstr($this->value, $needle, $beforeNeedle),
             false => strstr($this->value, $needle, $beforeNeedle),
         };
-        return $result ? static::build($result) : $result;
+        return is_string($result) ? static::build($result) : $result;
     }
 
     #[Pure]
@@ -145,7 +146,7 @@ class SmartString implements Stringable
         Stringable|string $needle,
         bool $beforeNeedle = false,
         int $flags = 0
-    ): static|false {
+    ): SmartString|false {
         if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
             return $this->stristr($needle, $beforeNeedle);
         }
@@ -168,17 +169,17 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function concatenate(Stringable|string $additionalValue): static
+    public function concatenate(Stringable|string $additionalValue): SmartString
     {
         return $this->concat($additionalValue);
     }
 
     #[Pure]
-    public function concat(Stringable|string $additionalValue): static
+    public function concat(Stringable|string $additionalValue): SmartString
     {
         if ($this->shouldUseGrapheme) {
             // If we're already multibyte characters, then the result of a concatenation will be too
-            return new static($this . $additionalValue, $this->shouldUseGrapheme);
+            return new SmartString($this . $additionalValue, $this->shouldUseGrapheme);
         }
         return static::build($this . $additionalValue);
     }
