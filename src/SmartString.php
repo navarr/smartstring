@@ -1,6 +1,6 @@
 <?php
 
-namespace Navarr;
+namespace Navarr\SmartString;
 
 use JetBrains\PhpStorm\Immutable;
 use JetBrains\PhpStorm\Pure;

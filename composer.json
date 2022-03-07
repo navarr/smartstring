@@ -12,7 +12,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Navarr\\": "src/"
+            "Navarr\\SmartString\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Navarr\\SmartString\\Test\\": "tests/"
         }
     },
     "require": {
