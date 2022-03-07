@@ -131,7 +131,7 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function strstr(Stringable|string $needle, bool $beforeNeedle = false): static|false
+    public function strstr(Stringable|string $needle, bool $beforeNeedle = false): SmartString|false
     {
         $needle = (string)$needle;
         $result = match ($this->shouldUseGrapheme) {
@@ -146,7 +146,7 @@ class SmartString implements Stringable
         Stringable|string $needle,
         bool $beforeNeedle = false,
         int $flags = 0
-    ): static|false {
+    ): SmartString|false {
         if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
             return $this->stristr($needle, $beforeNeedle);
         }
