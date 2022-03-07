@@ -2,6 +2,7 @@
 
 namespace Navarr\SmartString\Test;
 
+use Navarr\SmartString\SmartString;
 use Navarr\SmartString\SmartStringFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,8 @@ class StringLengthTest extends TestCase
         return [
             ['abcdef', 6],
             ['こんにちは', 5],
-            ['🏴󠁧󠁢󠁥󠁮󠁧󠁿', 1]
+            ['🏴󠁧󠁢󠁥󠁮󠁧󠁿', 1],
+            [SmartString::build('abc'), 3] // Ensure methods properly handle a Stringable
         ];
     }
 
