@@ -51,6 +51,7 @@ class SmartString implements Stringable
     #[Pure]
     public function stripos(Stringable|string $needle, int $offset = 0): int|false
     {
+        $needle = (string)$needle;
         return match ($this->shouldUseGrapheme) {
             true => grapheme_stripos($this->value, $needle, $offset),
             false => stripos($this->value, $needle, $offset)
