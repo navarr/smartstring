@@ -29,20 +29,26 @@ class ConstructionTest extends TestCase
 
     /**
      * @dataProvider getData
-     * @covers SmartString::build
+     * @covers       SmartString::build
      */
-    public function testBuild(Stringable|string $suppliedValue, string $expectedValue, bool $expectedUseGraphemeValue): void
-    {
+    public function testBuild(
+        Stringable|string $suppliedValue,
+        string $expectedValue,
+        bool $expectedUseGraphemeValue
+    ): void {
         $object = SmartString::build($suppliedValue);
         $this->testObject($object, $expectedValue, $expectedUseGraphemeValue);
     }
 
     /**
      * @dataProvider getData
-     * @covers SmartStringFactory::create
+     * @covers       SmartStringFactory::create
      */
-    public function testFactory(Stringable|string $suppliedValue, string $expectedValue, bool $expectedUseGraphemeValue): void
-    {
+    public function testFactory(
+        Stringable|string $suppliedValue,
+        string $expectedValue,
+        bool $expectedUseGraphemeValue
+    ): void {
         $object = $this->factory->create($suppliedValue);
         $this->testObject($object, $expectedValue, $expectedUseGraphemeValue);
     }
