@@ -21,7 +21,8 @@ class ConcatenateTest extends TestCase
     {
         return [
             ['a', 'b', 'ab'],
-            ['a', SmartString::build('b'), 'ab']
+            ['a', SmartString::build('b'), 'ab'],
+            ['a', '🏴', 'a🏴']
         ];
     }
 
