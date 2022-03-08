@@ -147,13 +147,23 @@ class SmartString implements Stringable
     #[Pure]
     public function substringFromNeedle(
         Stringable|string $needle,
-        bool $beforeNeedle = false,
         int $flags = 0
     ): SmartString|false {
         if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
-            return $this->stristr($needle, $beforeNeedle);
+            return $this->stristr($needle);
         }
-        return $this->strstr($needle, $beforeNeedle);
+        return $this->strstr($needle);
+    }
+
+    #[Pure]
+    public function substringUntilNeedle(
+        Stringable|string $needle,
+        int $flags = 0
+    ): SmartString|false {
+        if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
+            return $this->stristr($needle, true);
+        }
+        return $this->strstr($needle, true);
     }
 
     #[Pure]
