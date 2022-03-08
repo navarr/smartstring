@@ -29,6 +29,7 @@ class ConcatenateTest extends TestCase
 
     /**
      * @dataProvider getData
+     * @covers SmartString::concat
      */
     public function testConcat(string $initial, Stringable|string $additional, string $expectedResult): void
     {
@@ -40,6 +41,7 @@ class ConcatenateTest extends TestCase
 
     /**
      * @dataProvider getData
+     * @covers SmartString::concatenate
      */
     public function testConcatenate(string $initial, Stringable|string $additional, string $expectedResult): void
     {
