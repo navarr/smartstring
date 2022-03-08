@@ -29,7 +29,6 @@ class StringLengthTest extends TestCase
 
     /**
      * @dataProvider getData
-     * @covers SmartString::length
      */
     public function testLength(Stringable|string $string, int $expectedLength)
     {
@@ -39,7 +38,6 @@ class StringLengthTest extends TestCase
 
     /**
      * @dataProvider getData
-     * @covers SmartString::strlen
      */
     public function testStrlen(Stringable|string $string, int $expectedLength)
     {

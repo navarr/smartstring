@@ -29,7 +29,6 @@ class ConstructionTest extends TestCase
 
     /**
      * @dataProvider getData
-     * @covers       SmartString::build
      */
     public function testBuild(
         Stringable|string $suppliedValue,
@@ -42,7 +41,6 @@ class ConstructionTest extends TestCase
 
     /**
      * @dataProvider getData
-     * @covers       SmartStringFactory::create
      */
     public function testFactory(
         Stringable|string $suppliedValue,
