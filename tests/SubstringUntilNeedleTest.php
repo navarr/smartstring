@@ -48,6 +48,7 @@ class SubstringUntilNeedleTest extends TestCase
     public function setUp(): void
     {
         $this->factory = new SmartStringFactory();
+        parent::setUp();
     }
 
     /**
