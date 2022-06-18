@@ -22,6 +22,10 @@ class FindPositionTest extends TestCase
         return [
             ['abcABCdefDEF', 'c', 2],
             ['abcabcdefdef', 'c', 5, 3],
+            ['abcABCdefDEF', SmartString::build('c'), 2],
+            ['abcabcdefdef', SmartString::build('c'), 5, 3],
+            ['ab🏴defg', '🏴', 2],
+            ['ab🏴defg', SmartString::build('🏴'), 2],
         ];
     }
 
@@ -29,7 +33,11 @@ class FindPositionTest extends TestCase
     {
         return [
             ['abcABCdefDEF', 'C', 2],
-            ['ABCabcABCabc', 'C', 5, 3]
+            ['ABCabcABCabc', 'C', 5, 3],
+            ['abcABCdefDEF', SmartString::build('C'), 2],
+            ['ABCabcABCabc', SmartString::build('C'), 5, 3],
+            ['ab🏴defg', '🏴', 2],
+            ['ab🏴defg', SmartString::build('🏴'), 2],
         ];
     }
 
