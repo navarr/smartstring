@@ -1,6 +1,7 @@
 name: Continuous Integration
 on:
   push:
+  workflow_dispatch:
   schedule:
     - cron: 0 0 * * 0
 
@@ -10,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [unbuntu-latest, macos-latest, windows-latest]
-        php: ['8.1', '8.2']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        php: ['8.2', '8.3', '8.4']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -23,16 +24,39 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
       - name: Install Dependencies
         run: composer install
-        if: ${{ matrix.php != '8.2' }}
-
-      - name: Install Dependencies (Ignore Platform Req)
-        run: composer install --ignore-platform-req=php
-        if: ${{ matrix.php == '8.2' }}
 
       - name: Test
         run: vendor/bin/phpunit tests --testdox --coverage-clover coverage.xml
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ matrix.php == '8.4' && matrix.os == 'ubuntu-latest' }}
+        with:
+          name: codecov
+          path: coverage.xml
+
+  codecov:
+    name: Code Coverage Report
+    runs-on: ubuntu-latest
+    needs: phpunit
+    steps:
+      - name: Download Coverage Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: codecov
 
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v1
@@ -46,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2']
+        php: ['8.2', '8.3', '8.4']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -57,13 +81,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
       - name: Install Dependencies
         run: composer install
-        if: ${{ matrix.php != '8.2' }}
-
-      - name: Install Dependencies (Ignore Platform Req)
-        run: composer install --ignore-platform-req=php
-        if: ${{ matrix.php == '8.2' }}
 
       - name: Run PHPStan
         run: vendor/bin/phpstan
@@ -75,19 +105,25 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.4
           tools: composer:v2
 
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
       - name: Install Dependencies
         run: composer install
-        if: ${{ matrix.php != '8.2' }}
-
-      - name: Install Dependencies (Ignore Platform Req)
-        run: composer install --ignore-platform-req=php
-        if: ${{ matrix.php == '8.2' }}
 
       - name: PHP Code Sniffer
         run: vendor/bin/phpcs
@@ -98,7 +134,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        php: ['8.1', '8.2']
+        php: ['8.2', '8.3', '8.4']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -111,13 +147,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
       - name: Install Dependencies
         run: composer install
-        if: ${{ matrix.php != '8.2' }}
-
-      - name: Install Dependencies (Ignore Platform Req)
-        run: composer install --ignore-platform-req=php
-        if: ${{ matrix.php == '8.2' }}
 
       - name: Check for Mutants
         env:

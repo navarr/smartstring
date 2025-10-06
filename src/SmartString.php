@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Navarr\SmartString;
 
 use JetBrains\PhpStorm\Immutable;
@@ -47,8 +49,9 @@ class SmartString implements Stringable
     }
 
     #[Pure]
-    public function stripos(string $needle, int $offset = 0): int|false
+    public function stripos(Stringable|string $needle, int $offset = 0): int|false
     {
+        $needle = (string)$needle;
         return match ($this->shouldUseGrapheme) {
             true => grapheme_stripos($this->value, $needle, $offset),
             false => stripos($this->value, $needle, $offset)
@@ -89,7 +92,7 @@ class SmartString implements Stringable
     #[Pure]
     public function findLastPosition(Stringable|string $needle, int $offset = 0, int $flags = 0): int|false
     {
-        if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
+        if (($flags & self::CASE_INSENSITIVE) == self::CASE_INSENSITIVE) {
             return $this->strripos($needle, $offset);
         }
         return $this->strrpos($needle, $offset);
@@ -124,7 +127,7 @@ class SmartString implements Stringable
     #[Pure]
     public function findPosition(Stringable|string $needle, int $offset = 0, int $flags = 0): int|false
     {
-        if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
+        if (($flags & self::CASE_INSENSITIVE) == self::CASE_INSENSITIVE) {
             return $this->stripos($needle, $offset);
         }
         return $this->strpos($needle, $offset);
@@ -144,13 +147,23 @@ class SmartString implements Stringable
     #[Pure]
     public function substringFromNeedle(
         Stringable|string $needle,
-        bool $beforeNeedle = false,
         int $flags = 0
     ): SmartString|false {
-        if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
-            return $this->stristr($needle, $beforeNeedle);
+        if (($flags & self::CASE_INSENSITIVE) == self::CASE_INSENSITIVE) {
+            return $this->stristr($needle);
         }
-        return $this->strstr($needle, $beforeNeedle);
+        return $this->strstr($needle);
+    }
+
+    #[Pure]
+    public function substringUntilNeedle(
+        Stringable|string $needle,
+        int $flags = 0
+    ): SmartString|false {
+        if (($flags & self::CASE_INSENSITIVE) == self::CASE_INSENSITIVE) {
+            return $this->stristr($needle, true);
+        }
+        return $this->strstr($needle, true);
     }
 
     #[Pure]
