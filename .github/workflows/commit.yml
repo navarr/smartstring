@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [unbuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         php: ['8.2', '8.3', '8.4']
     steps:
       - name: Setup PHP
@@ -43,6 +43,7 @@ jobs:
 
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
+        if: ${{ matrix.php == '8.4' && matrix.os == 'ubuntu-latest' }}
         with:
           name: codecov
           path: coverage.xml
