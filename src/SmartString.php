@@ -149,7 +149,7 @@ class SmartString implements Stringable
         Stringable|string $needle,
         int $flags = 0
     ): SmartString|false {
-        if (($flags & static::CASE_INSENSITIVE) == static::CASE_INSENSITIVE) {
+        if (($flags & self::CASE_INSENSITIVE) == self::CASE_INSENSITIVE) {
             return $this->stristr($needle);
         }
         return $this->strstr($needle);
