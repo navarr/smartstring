@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        php: ['8.2', '8.3', '8.4']
+        php: ['8.2', '8.3', '8.4', '8.5']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.2', '8.3', '8.4']
+        php: ['8.2', '8.3', '8.4', '8.5']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -105,7 +105,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: 8.5
           tools: composer:v2
 
       - name: Checkout Repository
@@ -134,7 +134,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        php: ['8.2', '8.3', '8.4']
+        php: ['8.5']
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
